@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    ALL BOOKS PAGE
+    <p>
+
+
+        {% for book in page_obj %}
+            <p>
+            {{ book.title }}
+            {{ book.author }}
+            {{ book.media }}
+            {% if book.liked %}
+                it's liked
+            {% endif %}
+            {% if book.wishlist %}
+                it's wishlist
+            {% endif %}
+            {% if book.done %}
+                it's done
+            {% endif %}
+            </p>
+        {% endfor %}
+    </p>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    LOGIN PAGE
+{#        {% if error %}#}
+{#        <p style="color: red">{{ error }}</p>#}
+{#    {% endif %}#}
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="container">
+            <label for="username"><b>Username</b></label>
+            <input type="text" name="username" required>
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </div>
+    </form>
+
+</head>
+<body>
+
+</body>
+</html>
