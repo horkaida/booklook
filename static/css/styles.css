@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Playfair+Display:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Playfair+Display:ital@1&display=swap');
+.main {
+    /*background-color: #2c3440;*/background: rgb(20,23,28);
+    background: linear-gradient(0deg, rgba(20,23,28,1) 0%, rgba(44,52,64,1) 93%);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+.main .header {
+    background-color: #14171c;
+    width: 60%;
+    padding: 20px 20%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.main .header .logo {
+    display: flex;
+    align-items: center;
+}
+.main .header .logo .text {
+    color: white;
+    font-size: 22px;
+    line-height: 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-left: 10px;
+}
+.main .header .menu {
+    display: flex;
+    align-items: center;
+}
+.main .header .menu .menu-item {
+    font-size: 14px;
+    color: #9ab;
+    line-height: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    padding: 0 20px;
+    cursor: pointer;
+}
+.main .header .menu .menu-item:hover {
+    font-size: 14px;
+    color: white;
+}
+.main .header .menu .search {
+    font-size: 12px;
+    padding: 6px 30px 6px 10px;
+    width: 100px;
+    border-radius: 15px;
+    box-shadow: 0 1px 0 #414d5e;
+    color: #89a;
+    display: block;
+    font-size: 1rem;
+    height: 30px;
+    padding: 8px 30px 8px 10px;
+    margin-left: 20px;
+}
+.main-part {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    padding: 20px 20%;
+}
+.main-part .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.main-part .title {
+    color: #9ab;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+.main-part .container .book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.main-part .container .book .book-title {
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    margin-top: 15px;
+}
+.main-part .container .book .book-author {
+    font-size: 16px;
+    color: white;
+    opacity: 0.8;
+    text-align: center;
+    margin-top: 10px;
+}
+.main-part .container .book .image {
+    height: 250px;
+    width: 200px;
+    position: relative;
+    border: 1px solid white;
+    overflow: hidden;
+}
+.main-part .container .book .image .liked {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 5px;
+    left: 5px;
+    margin: 0;
+    cursor: pointer;
+}
+.main-part .container .book .image .wishlist {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 5px;
+    left: 35px;
+    margin: 0;
+    cursor: pointer;
+}
+.main-part .reviews-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.main-part .reviews-container .review {
+    display: flex;
+    margin-bottom: 40px;
+}
+.main-part .reviews-container .review .image {
+
+}
+.main-part .reviews-container .review .review-block {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.main-part .reviews-container .review .review-block .book-name {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+}
+.main-part .reviews-container .review .review-block .text {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    margin: 0;
+    margin-top: 5px;
+}
+.main-part .reviews-container .review .review-block .author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+.main-part .reviews-container .review .review-block .author .name {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    margin: 0;
+    margin-left: 10px;
+}
+
+

@@ -1,0 +1,34 @@
+<!doctype html>
+{% load static %}
+<title>{% block title %}{% endblock %} - Pet_shelter</title>
+<link rel="stylesheet" href={% static "css/styles.css" %}>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-w       idth, initial-scale=1">
+
+<body class="main">
+
+    <div class="header">
+        <div class="logo">
+            <img src={% static "media/book_icon.png" %} height="40" width="40" alt="">
+            <div class="text">BookLook</div>
+        </div>
+        <div class="menu">
+            {% if user.is_authenticated %}
+                <p class="menu-item">{{ user.username }}</p>
+                <a href="/user/logout" class="menu-item">Logout</a>
+                <a href="/user/wishlist" class="menu-item">Wishlist</a>
+                <a href="/user/favourites" class="menu-item">Favourites</a>
+                <a href="/history" class="menu-item">History</a>
+            {% else %}
+                <a href="/user/login" class="menu-item">Log In</a>
+                <a href="/user/register" class="menu-item">Sign In</a>
+            {% endif %}
+            <a href="/books" class="menu-item">Books</a>
+            <a href="/books/genres" class="menu-item">Genres</a>
+            <input type="text" class="search" placeholder="Search...">
+        </div>
+    </div>
+<div class="main-part">
+    {% block content %}{% endblock %}
+</div>
+</body>

@@ -9,12 +9,12 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=150)
-    description = models.CharField(max_length=250)
+    description = models.TextField()
     text = models.TextField()
     genre_id = models.ManyToManyField(Genre)
     author = models.CharField(max_length=200)
     media = models.TextField()
-    average_rate = models.IntegerField(null=True)
+    average_rate = models.FloatField(null=True)
 
     def __str__(self):
         return self.title
@@ -31,8 +31,9 @@ class BookInUse(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
-    total_reading_time = models.FloatField(null=True)
+    total_reading_time = models.CharField(max_length=150, null=True)
     is_favourite = models.BooleanField(default=False)
+    is_wishlist = models.BooleanField(default=False)
     start_reading =  models.DateTimeField(auto_now_add=False, null=True)
     finish_reading = models.DateTimeField(auto_now_add=False, null=True)
 

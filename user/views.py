@@ -27,7 +27,6 @@ def get_favourites(request):
     return render(request, 'books/favourites.html', {})
 
 
-
 def log_in(request):
     if request.method=='GET':
         return render(request, 'user/login.html')
