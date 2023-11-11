@@ -1,30 +1,51 @@
+from books.utils import paginate #TODO REFACTOR LOCATION
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from books import models
 
 
 def get_user(request):
     return render(request, 'user/user.html', {})
 
-def get_user_history(request):
-    return render(request, 'user/history.html', {})
+def get_user_history(request, page_number=1):
+    # if request.user.is_authenticated:
+    #     all_read_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
+    #                                                            status_id=2)
+    #     page_number = request.GET.get('page')
+    #     page_obj = paginate(page_number, all_read_books, 12)
+    return render(request, 'user/history.html', {'page_obj':page_obj})
 
 
 
-def get_wishlist(request):
-    #if post - remove from wishlist
-    return render(request, 'books/wishlist.html', {})
+def get_wishlist(request, page_number=1):
+    if request.user.is_authenticated:
+        wishlist_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
+                                                               is_wishlist=True)
+        if request.GET.get('page'):
+            page_number = request.GET.get('page')
+        page_obj = paginate(page_number, wishlist_books, 12)
+    return render(request, 'user/wishlist.html', {'page_obj':page_obj})
 
 def get_already_read_list(request):
-    #if post - remove from already read
-    return render(request, 'books/already_read.html', {})
+    if request.user.is_authenticated:
+        wishlist_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
+                                                               status_id=2)
+        if request.GET.get('page'):
+            page_number = request.GET.get('page')
+        page_obj = paginate(page_number, wishlist_books, 12)
+    return render(request, 'user/already_read.html', {'page_obj':page_obj})
 
 
 def get_favourites(request):
-    #if post - remove from fav
-    # return redirect('/')
-    return render(request, 'books/favourites.html', {})
+    if request.user.is_authenticated:
+        wishlist_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
+                                                               is_favourite=True)
+        if request.GET.get('page'):
+            page_number = request.GET.get('page')
+        page_obj = paginate(page_number, wishlist_books, 12)
+    return render(request, 'books/favourites.html', {'page_obj':page_obj})
 
 
 def log_in(request):
@@ -34,7 +55,6 @@ def log_in(request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-        print(f'USER {user}')
         if user is not None:
             login(request, user)
             return redirect('/')

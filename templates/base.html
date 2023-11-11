@@ -18,14 +18,18 @@
                 <a href="/user/logout" class="menu-item">Logout</a>
                 <a href="/user/wishlist" class="menu-item">Wishlist</a>
                 <a href="/user/favourites" class="menu-item">Favourites</a>
-                <a href="/history" class="menu-item">History</a>
+                <a href="user/history" class="menu-item">History</a>
             {% else %}
                 <a href="/user/login" class="menu-item">Log In</a>
                 <a href="/user/register" class="menu-item">Sign In</a>
             {% endif %}
             <a href="/books" class="menu-item">Books</a>
             <a href="/books/genres" class="menu-item">Genres</a>
-            <input type="text" class="search" placeholder="Search...">
+            <form action="/books/search" method="post">
+                {% csrf_token %}
+                <input type="text" class="search" placeholder="Search..." name="search_query">
+                <button type="submit">asdas</button>
+            </form>
         </div>
     </div>
 <div class="main-part">

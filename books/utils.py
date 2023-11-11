@@ -31,11 +31,11 @@ def get_all_genres():
     return all_genres
 
 
-# def paginate(request, all_books):
-#     paginator = Paginator(all_books, 12)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return page_obj
+def paginate(page_number, data, per_page = 12):
+    paginator = Paginator(data, per_page)
+    page_object = paginator.get_page(page_number)
+    return page_object
+
 def calc_total_reading(current_total_time, stop_reading, start_reading):
     #current_total_time:str, stop_reading:datetime, start_reading:datetime
     time_per_session = stop_reading - start_reading

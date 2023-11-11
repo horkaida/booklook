@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block content %}
-        <p class="title">All Books</p>
+        <p class="title">Last reviewed books</p>
         <div class="container">
-            {% for book in page_obj %}
+            {% for book in most_popular_books %}
                 <div class="book">
                     <div class="image">
                         {% if book.liked %}

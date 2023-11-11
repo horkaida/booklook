@@ -2,8 +2,10 @@
 {% load static %}
 
 {% block content %}
-        <p class="title">All Books</p>
+        <input type="text" class="search" placeholder="Search...">
+        <p class="title">Search results</p>
         <div class="container">
+        {% if page_obj %}
             {% for book in page_obj %}
                 <div class="book">
                     <div class="image">
@@ -21,6 +23,9 @@
                     <div class="book-title">{{ book.title }}</div>
                     <div class="book-author">{{ book.author }}</div>
                 </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            No books found
+        {% endif %}
         </div>
 {% endblock %}
