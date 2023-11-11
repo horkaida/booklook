@@ -1,0 +1,48 @@
+from datetime import datetime, timezone, timedelta
+
+from django.core.paginator import Paginator
+
+from books import models
+
+
+def get_books_properties(page_obj, user_books): #TODO REFACTOR
+    for book in page_obj:
+        for user_book in user_books:
+            if book.id == user_book.book_id_id and user_book.is_favourite:
+                book.liked = True
+            if book.id == user_book.book_id_id and user_book.is_wishlist:
+                book.wishlist = True
+            if book.id == user_book.book_id_id and user_book.status_id == 2:
+                book.done = True
+    return page_obj
+
+def get_one_book_properties(current_book, users_books):
+    for user_book in users_books:
+        if current_book.id == user_book.book_id_id and user_book.is_favourite:
+            current_book.liked = True
+        if current_book.id == user_book.book_id_id and user_book.is_wishlist:
+            current_book.wishlist = True
+        if current_book.id == user_book.book_id_id and user_book.status_id == 2:
+            current_book.done = True
+
+
+def get_all_genres():
+    all_genres = models.Genre.objects.all()
+    return all_genres
+
+
+# def paginate(request, all_books):
+#     paginator = Paginator(all_books, 12)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return page_obj
+def calc_total_reading(current_total_time, stop_reading, start_reading):
+    #current_total_time:str, stop_reading:datetime, start_reading:datetime
+    time_per_session = stop_reading - start_reading
+    days_from_session = time_per_session.days
+    hours_from_session = time_per_session.seconds//3600
+    minutes_from_session = (time_per_session.seconds//60)%60
+    minutes_per_session = hours_from_session*60 + minutes_from_session + days_from_session*24*60
+    total_time = minutes_per_session + int(current_total_time)
+    return total_time
+
