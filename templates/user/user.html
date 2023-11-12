@@ -1,15 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    USER PAGE
-    {% if request.user.is_authenticated %}
-        LOGGED IN
-    {% endif %}
-</head>
-<body>
+{% block content %}
+    <div class="container">
 
-</body>
-</html>
+        {{ request.user.username }} <br>
+        {{ request.user.first_name }} <br>
+        {{ request.user.last_name }} <br>
+        {{ request.user.email }} <br>
+
+        <a href="/user/{{ request.user.id }}/update">Edit profile</a>
+
+    <div>
+        {% for book in user_data.last_read_books %}
+            LAST READ
+            {{ book.book_id.id }}
+        	{{ book.book_id.title }}
+        	{{ book.book_id.author }}
+        {% endfor %}
+    </div>
+        <br>
+
+        <div>
+        {% for book in user_data.last_added_to_fav %}
+        	{{ book.book_id.id }}
+        	{{ book.book_id.title }}
+        {% endfor %}
+    </div>
+
+
+        <div>
+        {% for book in user_data.last_added_to_wishlist %}
+            {{ book.book_id.id }}
+        	{{ book.book_id.title }}
+        	{{ book.book_id.author }}
+        {% endfor %}
+    </div>
+
+    <div style="color: white">
+        {{ user_data.all_read_books_count }}
+        {{ user_data.all_wishlist_count }}
+        {{ user_data.all_favourites_count }}
+    </div>
+    </div>
+{% endblock %}

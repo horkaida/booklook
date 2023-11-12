@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+    <p>PROFILE EDIT</p>
+
+
+        <form action="/user/{{ request.user.id }}/update" method="post">
+            {% csrf_token %}
+            <input type="text" name="first_name" value="{{ request.user.first_name }}" required>
+            <input type="text" name="second_name" value="{{ request.user.last_name }}" required>
+            <button type="submit">Change</button>
+        </form>
+    
+    </div>
+{% endblock %}

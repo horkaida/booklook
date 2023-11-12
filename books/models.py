@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Genre(models.Model):
@@ -28,7 +28,7 @@ class Status(models.Model):
 
 
 class BookInUse(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
     total_reading_time = models.CharField(max_length=150, null=True)
@@ -42,21 +42,21 @@ class BookInUse(models.Model):
 
 
 class ReadingSession(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    start_reading_time =  models.DateTimeField(auto_now_add=True)
-    end_reading_time = models.DateTimeField(auto_now_add=True)
+    start_reading_time =  models.DateTimeField(auto_now_add=False, null=True)
+    end_reading_time = models.DateTimeField(auto_now_add=False, null=True)
 
 
 class Rate(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     rate = models.FloatField()
 
 
 class Feedback(models.Model):
     text = models.TextField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

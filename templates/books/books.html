@@ -18,7 +18,7 @@
 {#                        {% endif %}#}
                         <img src="{{ book.media }}" width="200" height="300" alt="">
                     </div>
-                    <div class="book-title">{{ book.title }}</div>
+                    <a href="/books/{{ book.id }}" class="book-title">{{ book.title }}</a>
                     <div class="book-author">{{ book.author }}</div>
                 </div>
         {% endfor %}

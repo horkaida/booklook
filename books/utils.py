@@ -16,14 +16,12 @@ def get_books_properties(page_obj, user_books): #TODO REFACTOR
                 book.done = True
     return page_obj
 
-def get_one_book_properties(current_book, users_books):
-    for user_book in users_books:
-        if current_book.id == user_book.book_id_id and user_book.is_favourite:
-            current_book.liked = True
-        if current_book.id == user_book.book_id_id and user_book.is_wishlist:
-            current_book.wishlist = True
-        if current_book.id == user_book.book_id_id and user_book.status_id == 2:
-            current_book.done = True
+def get_one_book_properties(current_book, user_book):
+    current_book.liked = user_book.is_favourite
+    current_book.wishlist = user_book.is_wishlist
+    if user_book.status_id == 2:
+        current_book.done = True
+    return current_book
 
 
 def get_all_genres():
@@ -37,7 +35,7 @@ def paginate(page_number, data, per_page = 12):
     return page_object
 
 def calc_total_reading(current_total_time, stop_reading, start_reading):
-    #current_total_time:str, stop_reading:datetime, start_reading:datetime
+    #stop_reading:datetime, start_reading:datetime
     time_per_session = stop_reading - start_reading
     days_from_session = time_per_session.days
     hours_from_session = time_per_session.seconds//3600

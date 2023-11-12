@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    BOOK PAGE
-</head>
-<body>
-
-</body>
-</html>
+{% block content %}
+    {{ book.text }}
+    <a href="/books/{{ book.id }}/start">START READING</a>
+    <a href="/books/{{ book.id }}/stop">STOP READING</a>
+{% endblock %}

@@ -4,7 +4,13 @@
 {% block content %}
         <p class="title">All Books</p>
         <div class="container">
-            {% for book in page_obj %}
+            {% for feedback in page_obj %}
+                {{ feedback.user_id.username }}
+                {{ feedback.text }}
+                <br>
+            {% endfor %}
+
+
                 <div class="book">
                     <div class="image">
                         {% if book.liked %}
@@ -21,6 +27,6 @@
                     <div class="book-title">{{ book.title }}</div>
                     <div class="book-author">{{ book.author }}</div>
                 </div>
-        {% endfor %}
+        <a href="/books/{{ book.id }}/open">OPEN BOOK</a>
         </div>
 {% endblock %}

@@ -14,10 +14,10 @@
         </div>
         <div class="menu">
             {% if user.is_authenticated %}
-                <p class="menu-item">{{ user.username }}</p>
+                <a href="/user" class="menu-item">{{ user.username }}</a>
                 <a href="/user/logout" class="menu-item">Logout</a>
-                <a href="/user/wishlist" class="menu-item">Wishlist</a>
-                <a href="/user/favourites" class="menu-item">Favourites</a>
+                <a href="/wishlist" class="menu-item">Wishlist</a>
+                <a href="/favourites" class="menu-item">Favourites</a>
                 <a href="user/history" class="menu-item">History</a>
             {% else %}
                 <a href="/user/login" class="menu-item">Log In</a>

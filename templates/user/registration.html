@@ -1,12 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    REGISTRATION PAGE
-</head>
-<body>
+{% block content %}
+    <p class="title">All Books</p>
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="container">
+                <h1>Sign Up</h1>
+                <hr>
 
-</body>
-</html>
+                <label for="username"><b>Юзернейм</b></label>
+                <input type="text" name="username" required>
+
+                <label for="email"><b>Електронна адреса</b></label>
+                <input type="text" name="email" required>
+
+                <label for="password"><b>Пароль</b></label>
+                <input type="password" name="password" required>
+
+                <label for="repeat_password"><b>Повторіть пароль</b></label>
+                <input type="password" name="repeat_password" required>
+
+                <label for="first_name"><b>Ім'я</b></label>
+                <input type="text" name="first_name" required>
+
+                <label for="last_name"><b>Прізвище</b></label>
+                <input type="text" name="last_name" required>
+
+
+                <div class="clearfix">
+                    <button type="submit" class="signupbtn">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
