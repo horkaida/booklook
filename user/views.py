@@ -6,7 +6,7 @@ from books import models
 from django.views.generic import UpdateView
 from user.models import CustomUser
 
-
+#TODO CHANGE LOGIN LOGOUT REGISTER URLS
 class ProfileUpdateView(UpdateView):
     model = CustomUser
     template_name = 'user/edit_profile.html'
@@ -31,10 +31,9 @@ def get_user(request):
 
 
 
-@login_required(login_url='/user/login')
+@login_required(login_url='/user/login') #TODO WITH BOOK PROPERTIES
 def get_user_history(request, page_number=1):
-    all_read_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
-                                                           status_id=2) #TODO Q ADD STATUS=1
+    all_read_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id, status_id__in=[1, 2])
     if request.GET.get('page'):
         page_number = request.GET.get('page')
     page_obj = paginate(page_number, all_read_books, 12)
