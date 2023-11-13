@@ -97,8 +97,8 @@ def search(request, page_number=1):
     if request.method == 'POST':
         search_query = request.POST['search_query']
         all_books = models.Book.objects.filter(title__contains=search_query)
-        page_number = request.GET.get('page')
-        page_obj = paginate(all_books, page_number)
+        page_number = request.GET.get('page') if request.GET.get('page') else page_number
+        page_obj = paginate(data=all_books, page_number=page_number)
         if request.user.is_authenticated:
             user_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id)
             page_obj = get_books_properties(page_obj, user_books)
@@ -165,7 +165,7 @@ def add_to_favourites(request, book_id):
         models.BookInUse.objects.create(book_id_id=book_id,
                                         user_id_id=request.user.id,
                                         is_favourite=True)
-    return redirect(f'books/{book_id}')
+    return redirect(f'/books/{book_id}')
 
 
 def get_all_feedbacks(request, page_number=1):

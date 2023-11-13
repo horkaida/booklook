@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&family=Playfair+Display:ital@1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Playfair+Display:ital@1&display=swap');
+a {
+    text-decoration: none;
+}
 .main {
     /*background-color: #2c3440;*/background: rgb(20,23,28);
     background: linear-gradient(0deg, rgba(20,23,28,1) 0%, rgba(44,52,64,1) 93%);
@@ -8,12 +11,14 @@
     flex-direction: column;
     padding: 0;
     margin: 0;
+    min-height: 100vh;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 .main .header {
     background-color: #14171c;
-    width: 60%;
-    padding: 20px 20%;
-    margin: auto;
+    width: 70%;
+    padding: 20px 15%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -47,6 +52,9 @@
     font-size: 14px;
     color: white;
 }
+.main .header .menu .search-block {
+    position: relative;
+}
 .main .header .menu .search {
     font-size: 12px;
     padding: 6px 30px 6px 10px;
@@ -59,6 +67,17 @@
     height: 30px;
     padding: 8px 30px 8px 10px;
     margin-left: 20px;
+}
+.main .header .menu .search-button {
+    background: rgba(0,0,0,0);
+    border: none;
+    position: absolute;
+    right: 5px;
+    top: 15px;
+    cursor: pointer;
+}
+.main .header .menu .search-button a {
+    cursor: pointer;
 }
 .main-part {
     display: flex;
@@ -80,6 +99,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0 5px;
     margin-bottom: 30px;
 }
 .main-part .container .book .book-title {
@@ -87,6 +107,10 @@
     color: white;
     text-align: center;
     margin-top: 15px;
+}
+.main-part .container .book .book-title:hover {
+    font-weight: 700;
+    cursor: pointer;
 }
 .main-part .container .book .book-author {
     font-size: 16px;
@@ -168,5 +192,108 @@
     margin: 0;
     margin-left: 10px;
 }
+.main-part .book-page {
 
-
+}
+.main-part .book-page .book {
+    display: flex;
+}
+.main-part .book-page .book-info {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.main-part .book-page .book-info .book-title {
+    font-size: 22px;
+    color: white;
+    margin-top: 15px;
+}
+.main-part .book-page .book-info .actions-block {
+    display: flex;
+    align-items: center;
+}
+.main-part .book-page .book-info .action {
+    color: white;
+    text-decoration: none;
+    border: 2px solid white;
+    padding: 5px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+.main-part .book-page .book-info .book-desc {
+    font-size: 18px;
+    color: white;
+    margin-top: 15px;
+    opacity: 0.7;
+}
+.main .book-page .reviews-container {
+    display: flex;
+    flex-direction: column;
+}
+.main .book-page .reviews-container .review-block {
+    margin-left: 0;
+}
+.main .user-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.main .user-page .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 50px;
+}
+.main .user-page .user-info .user-name {
+    font-size: 30px;
+    color: white;
+    margin-top: 0;
+}
+.main .user-page .user-info .user-name a {
+    color: white;
+    font-size: 15px;
+    padding: 5px;
+    border: 1px solid white;
+    margin-top: 15px;
+    position: relative;
+    display: inline-block;
+}
+.main .user-page .user-info .user-stats {
+    display: flex;
+}
+.main .user-page .user-info .user-stats .stat {
+    font-size: 18px;
+    color: white;
+    margin-top: 15px;
+    text-align: center;
+    margin: 0 20px;
+    line-height: 26px;
+}
+.main-part .readed-books {
+    grid-template-columns: 1fr 1fr;
+}
+.main-part .readed-books .book {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+.main-part .readed-books .book .book-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 15px;
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.pagination a {
+    color: white;
+    text-decoration: underline;
+}
+.pagination span {
+    margin:0 10px;
+}

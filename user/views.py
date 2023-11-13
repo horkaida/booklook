@@ -47,6 +47,7 @@ def get_wishlist(request, page_number=1):
     if request.GET.get('page'):
         page_number = request.GET.get('page')
     page_obj = paginate(page_number=page_number, data=wishlist_books, per_page=12)
+    print(page_obj)
     return render(request, 'user/wishlist.html', {'page_obj':page_obj})
 
 

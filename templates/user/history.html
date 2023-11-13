@@ -2,14 +2,25 @@
 {% load static %}
 
 {% block content %}
+    <p class="title">My History</p>
     <div class="container">
-    <p>WISHLIST</p>
-
-    {% for book in page_obj %}
-    	{{ book.book_id.title }}
-    {% endfor %}
-
-
-
+        {% for book in page_obj %}
+            <div class="book">
+                <div class="image">
+                    {% if book.is_favourite %}
+                        <img src={% static "media/heart.png" %} height="20" width="20" class="liked" alt="">
+                    {% endif %}
+                    {% if book.is_wishlist %}
+                        <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
+                    {% endif %}
+                    {#                        {% if book.done %}#}
+                    {#                            it's done#}
+                    {#                        {% endif %}#}
+                    <img src="{{ book.media }}" width="200" height="300" alt="">
+                </div>
+                <a href="/books/{{ book.book_id_id }}"><div class="book-title">{{ book.book_id.title }}</div></a>
+                <div class="book-author">{{ book.book_id.author }}</div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
