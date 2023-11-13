@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    HISTORY PAGE
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+    <div class="container">
+    <p>WISHLIST</p>
+
+    {% for book in page_obj %}
+    	{{ book.book_id.title }}
+    {% endfor %}
+
+
+
+    </div>
+{% endblock %}

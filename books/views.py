@@ -1,4 +1,5 @@
 from django.db.models import Min
+from django.db.models import Count
 from django.shortcuts import render, redirect
 from books import models
 from books.utils import (get_books_properties,calc_total_reading,
@@ -53,7 +54,8 @@ def mark_as_read(request, book_id):
         current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
                                                               user_id_id=request.user.id).first()
         if current_book_in_use:
-            current_book_in_use.update(status_id=2)
+            models.BookInUse.objects.filter(book_id_id=book_id,
+                                            user_id_id=request.user.id).update(status_id=2)
         else:
             models.BookInUse.objects.create(book_id_id=book_id,
                                             user_id_id=request.user.id,
@@ -66,7 +68,8 @@ def add_to_wishlist(request, book_id):
         current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
                                                               user_id_id=request.user.id).first()
         if current_book_in_use:
-            current_book_in_use.update(is_wishlist=True)
+            models.BookInUse.objects.filter(book_id_id=book_id,
+                                            user_id_id=request.user.id).update(is_wishlist=True)
         else:
             models.BookInUse.objects.create(book_id_id=book_id,
                                             user_id_id=request.user.id,
@@ -79,7 +82,6 @@ def get_book_preview(request, book_id, page_number=1):
     if request.user.is_authenticated:
         user_book = models.BookInUse.objects.filter(book_id_id=book_id,
                                                  user_id_id=request.user.id).first()
-        print('HELLLOOOO', user_book)
         if user_book:
             if user_book.book_id_id == current_book.id:
                 current_book = get_one_book_properties(current_book, user_book)
@@ -154,16 +156,16 @@ def stop_reading(request, book_id):
 
 @login_required(login_url='/user/login')
 def add_to_favourites(request, book_id):
-    if request.user.is_authenticated:
-        current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
-                                                              user_id_id=request.user.id)
-        if current_book_in_use:
-            current_book_in_use.update(is_favourite=True)
-        else:
-            models.BookInUse.objects.create(book_id_id=book_id,
-                                            user_id_id=request.user.id,
-                                            is_favourite=True)
-        return redirect(f'books/{book_id}')
+    current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
+                                                          user_id_id=request.user.id)
+    if current_book_in_use:
+        models.BookInUse.objects.filter(book_id_id=book_id,
+                                        user_id_id=request.user.id).update(is_favourite=True)
+    else:
+        models.BookInUse.objects.create(book_id_id=book_id,
+                                        user_id_id=request.user.id,
+                                        is_favourite=True)
+    return redirect(f'books/{book_id}')
 
 
 def get_all_feedbacks(request, page_number=1):
@@ -185,10 +187,16 @@ def get_genres(request):
 @login_required(login_url='/user/login')
 def rate_book(request, book_id):
     book_rate = request.POST.get('book_rate')
-    new_rate = models.Rate.objects.update(user_id_id=request.user.id,
+    rated_book = models.Rate.objects.filter(user_id_id=request.user.id,
+                                            book_id_id=book_id).first()
+    if rated_book:
+        models.Rate.objects.filter(user_id_id=request.user.id,
+                                   book_id_id=book_id).update(rate=book_rate)
+    else:
+        new_rate = models.Rate.objects.create(user_id_id=request.user.id,
                                           book_id_id=book_id,
                                           rate=book_rate)
-    redirect('/')
+    return redirect(f'/books/{book_id}')
 
 
 

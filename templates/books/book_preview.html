@@ -28,5 +28,11 @@
                     <div class="book-author">{{ book.author }}</div>
                 </div>
         <a href="/books/{{ book.id }}/open">OPEN BOOK</a>
+
+            <form action="/books/{{ book.id }}/rate" method="post">RATE BOOK
+                {% csrf_token %}
+                <input type="number" placeholder="rate" name="book_rate">
+                <button type="submit">SUBMIT</button>
+            </form>
         </div>
 {% endblock %}
