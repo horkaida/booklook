@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% extends 'base.html' %}
+{% load static %}
 
-    GENRES PAGE
-</head>
-<body>
+{% block content %}
+    <div class="container">
+    <p></p>
 
-</body>
-</html>
+    {% for genre in all_genres %}
+    	{{ genre.name }}
+    {% endfor %}
+
+
+
+    </div>
+{% endblock %}
