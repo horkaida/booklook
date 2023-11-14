@@ -2,25 +2,40 @@
 {% load static %}
 
 {% block content %}
-        <p class="title">All Books</p>
-        <div class="container">
-            {% for book in page_obj %}
-                <div class="book">
-                    <div class="image">
-                        {% if book.liked %}
-                            <img src={% static "media/heart.png.png" %} height="20" width="20" class="liked" alt="">
-                        {% endif %}
-                        {% if book.wishlist %}
-                            <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
-                        {% endif %}
-{#                        {% if book.done %}#}
-{#                            it's done#}
-{#                        {% endif %}#}
-                        <img src="{{ book.media }}" width="200" height="300" alt="">
-                    </div>
-                    <a href="/books/{{ book.id }}" class="book-title">{{ book.title }}</a>
-                    <div class="book-author">{{ book.author }}</div>
+    <p class="title">All Books</p>
+    <div class="container">
+        {% for book in page_obj %}
+            <div class="book">
+                <div class="image">
+                    {% if book.liked %}
+                        <img src={% static "media/heart.png" %} height="20" width="20" class="liked" alt="">
+                    {% endif %}
+                    {% if book.wishlist %}
+                        <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
+                    {% endif %}
+                    {#                        {% if book.done %}#}
+                    {#                            it's done#}
+                    {#                        {% endif %}#}
+                    <img src="{{ book.media }}" width="200" height="300" alt="">
                 </div>
+                <a href="/books/{{ book.id }}" class="book-title">{{ book.title }}</a>
+                <div class="book-author">{{ book.author }}</div>
+            </div>
         {% endfor %}
-        </div>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}

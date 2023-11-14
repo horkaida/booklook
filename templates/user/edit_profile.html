@@ -2,16 +2,21 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-    <p>PROFILE EDIT</p>
+    <div class="container form">
+        <div class="edit-form">
+            <p class="form-title">PROFILE EDIT</p>
 
 
         <form action="/user/{{ request.user.id }}/update" method="post">
             {% csrf_token %}
-            <input type="text" name="first_name" value="{{ request.user.first_name }}" required>
-            <input type="text" name="second_name" value="{{ request.user.last_name }}" required>
-            <button type="submit">Change</button>
+            <label for="name">First Name</label>
+            <input id="name" type="text" name="first_name" value="{{ request.user.first_name }}" required>
+            <label for="last_name">Last Name</label>
+            <input id="last_name" type="text" name="second_name" value="{{ request.user.last_name }}" required>
+            <button type="submit">Save Changes</button>
         </form>
+        </div>
+
     
     </div>
 {% endblock %}

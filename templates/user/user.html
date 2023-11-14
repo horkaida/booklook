@@ -2,45 +2,76 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
+    <div class="user-page">
+        <div class="user-info">
+            <div class="user-name">
+                {{ request.user.username }} <br>
+                <a href="/user/{{ request.user.id }}/update">Edit profile</a>
+            </div>
+            <div class="user-stats">
+                <div class="stat">
+                    Done <br>
+                    {{ user_data.all_read_books_count }}
+                </div>
+                <div class="stat">
+                    Wishlisted
+                    <br>
+                    {{ user_data.all_wishlist_count }}
+                </div>
+                <div class="stat">
+                    Liked <br>
+                    {{ user_data.all_favourites_count }}
+                </div>
+            </div>
+        </div>
+        <p class="title">Last Read</p>
+        <div class="container readed-books">
+            {% for book in user_data.last_read_books %}
+                <div class="book">
+                    <div class="image">
+                        <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
+                    </div>
+                    <div class="book-info">
+                        <a href="/books/{{ book.id }}">
+                            <div class="book-title">{{ book.book_id.title }}</div>
+                        </a>
+                        <div class="book-author">{{ book.book_id.author }}</div>
+                        {% if book.total_reading_time %}
+                            <p class="book-title">Reading Time: {{ book.total_reading_time }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <p class="title">Last Favourites</p>
+        <div class="container">
+            {% for book in user_data.last_added_to_fav %}
+                <div class="book">
+                    <div class="image">
+                        <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
+                    </div>
+                    <a href="/books/{{ book.id }}">
+                        <div class="book-title">{{ book.book_id.title }}</div>
+                    </a>
+                    <div class="book-author">{{ book.book_id.author }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <p class="title">Last Added to Wishlist</p>
+        <div class="container">
+            {% for book in user_data.last_added_to_wishlist %}
+                <div class="book">
+                    <div class="image">
+                        <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
+                    </div>
+                    <a href="/books/{{ book.id }}">
+                        <div class="book-title">{{ book.book_id.title }}</div>
+                    </a>
+                    <div class="book-author">{{ book.book_id.author }}</div>
+                </div>
+            {% endfor %}
+        </div>
 
-        {{ request.user.username }} <br>
-        {{ request.user.first_name }} <br>
-        {{ request.user.last_name }} <br>
-        {{ request.user.email }} <br>
 
-        <a href="/user/{{ request.user.id }}/update">Edit profile</a>
-
-    <div>
-        {% for book in user_data.last_read_books %}
-            LAST READ
-            {{ book.book_id.id }}
-        	{{ book.book_id.title }}
-        	{{ book.book_id.author }}
-        {% endfor %}
-    </div>
-        <br>
-
-        <div>
-        {% for book in user_data.last_added_to_fav %}
-        	{{ book.book_id.id }}
-        	{{ book.book_id.title }}
-        {% endfor %}
-    </div>
-
-
-        <div>
-        {% for book in user_data.last_added_to_wishlist %}
-            {{ book.book_id.id }}
-        	{{ book.book_id.title }}
-        	{{ book.book_id.author }}
-        {% endfor %}
-    </div>
-
-    <div style="color: white">
-        {{ user_data.all_read_books_count }}
-        {{ user_data.all_wishlist_count }}
-        {{ user_data.all_favourites_count }}
-    </div>
     </div>
 {% endblock %}

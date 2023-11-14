@@ -10,7 +10,7 @@ from user.models import CustomUser
 class ProfileUpdateView(UpdateView):
     model = CustomUser
     template_name = 'user/edit_profile.html'
-    fields = ['first_name', 'last_name'] #TODO CHANGE TO FORM CLASS
+    fields = ['first_name', 'last_name']
 
 
 @login_required(login_url='/user/login')
@@ -21,12 +21,19 @@ def get_user(request):
                                                               is_favourite=True).order_by('-id')
     all_added_to_wishlist = models.BookInUse.objects.filter(user_id_id=request.user.id,
                                                                    is_wishlist=True).order_by('-id')
+    total_reading_time = models.BookInUse.objects.all().filter(user_id_id=request.user.id, status_id__in=[1, 2])
+    for book in total_reading_time:
+        total_reading = 0
+        if book.total_reading_time:
+            total_reading += int(book.total_reading_time)
+
     user_data = {'all_read_books_count':len(all_read_books),
                  'all_favourites_count': len(all_added_to_fav),
                  'all_wishlist_count':len(all_added_to_wishlist),
                  'last_read_books':all_read_books[:4],
                  'last_added_to_fav':all_added_to_fav[:4],
-                 'last_added_to_wishlist':all_added_to_wishlist[:4],}
+                 'last_added_to_wishlist':all_added_to_wishlist[:4],
+                 'total_reading':total_reading}
     return render(request, 'user/user.html', {'user_data':user_data})
 
 
@@ -34,9 +41,8 @@ def get_user(request):
 @login_required(login_url='/user/login') #TODO WITH BOOK PROPERTIES
 def get_user_history(request, page_number=1):
     all_read_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id, status_id__in=[1, 2])
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
-    page_obj = paginate(page_number, all_read_books, 12)
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
+    page_obj = paginate(page_number=page_number, data=all_read_books, per_page=12)
     return render(request, 'user/history.html', {'page_obj':page_obj})
 
 
@@ -44,8 +50,7 @@ def get_user_history(request, page_number=1):
 def get_wishlist(request, page_number=1):
     wishlist_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
                                                            is_wishlist=True)
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
     page_obj = paginate(page_number=page_number, data=wishlist_books, per_page=12)
     return render(request, 'user/wishlist.html', {'page_obj':page_obj})
 
@@ -54,9 +59,8 @@ def get_wishlist(request, page_number=1):
 def get_favourites(request, page_number=1):
     wishlist_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
                                                            is_favourite=True)
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
-    page_obj = paginate(page_number, wishlist_books, 12)
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
+    page_obj = paginate(page_number=page_number, data=wishlist_books, per_page=12)
     return render(request, 'user/favourites.html', {'page_obj':page_obj})
 
 
