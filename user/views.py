@@ -16,14 +16,14 @@ class ProfileUpdateView(UpdateView):
 @login_required(login_url='/user/login')
 def get_user(request):
     all_read_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
-                                                            status_id=2).order_by('-id')
+                                                            status_id__in=[1, 2]).order_by('-id')
     all_added_to_fav = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
                                                               is_favourite=True).order_by('-id')
     all_added_to_wishlist = models.BookInUse.objects.filter(user_id_id=request.user.id,
                                                                    is_wishlist=True).order_by('-id')
-    total_reading_time = models.BookInUse.objects.all().filter(user_id_id=request.user.id, status_id__in=[1, 2])
+    total_reading_time = models.BookInUse.objects.all().filter(user_id_id=request.user.id)
+    total_reading = 0
     for book in total_reading_time:
-        total_reading = 0
         if book.total_reading_time:
             total_reading += int(book.total_reading_time)
 

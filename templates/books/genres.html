@@ -2,12 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-    <p></p>
+    <div class="genres">
 
-    {% for genre in all_genres %}
-        <a href="/books/genres/{{ genre.id }}">{{ genre.name }}</a>
-    {% endfor %}
+        {% for genre in all_genres %}
+            <a class="genre" href="/books/genres/{{ genre.id }}">{{ genre.name }}</a>
+        {% endfor %}
 
 
 

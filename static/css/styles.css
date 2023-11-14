@@ -126,22 +126,19 @@ a {
     border: 1px solid white;
     overflow: hidden;
 }
-.main-part .container .book .image .liked {
-    position: absolute;
-    height: 20px;
-    width: 20px;
+.main-part .container .book .image .statuses {
+    display: flex;
     top: 5px;
     left: 5px;
-    margin: 0;
+    position: absolute;
+}
+.main-part .container .book .image .liked {
     cursor: pointer;
 }
 .main-part .container .book .image .wishlist {
-    position: absolute;
-    height: 20px;
-    width: 20px;
-    top: 5px;
-    left: 35px;
-    margin: 0;
+    cursor: pointer;
+}
+.main-part .container .book .image .done {
     cursor: pointer;
 }
 .main-part .reviews-container {
@@ -417,4 +414,54 @@ display: flex;
     width: 80%;
     margin-top: 10px;
     margin-bottom: 20px;
+}
+.genres {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.genre {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+.delete-comment {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.main .blog-container {
+    display: flex;
+    flex-direction: column;
+}
+.blog {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid white;
+}
+.blog .title {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.blog .text {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    margin-top: 10px;
+}
+.blog .date {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    margin-top: 10px;
 }

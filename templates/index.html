@@ -7,15 +7,17 @@
         {% for book in most_popular_books %}
             <div class="book">
                 <div class="image">
-                    {% if book.liked %}
-                        <img src={% static "media/heart.png" %} height="20" width="20" class="liked" alt="">
-                    {% endif %}
-                    {% if book.wishlist %}
-                        <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
-                    {% endif %}
-                    {#                        {% if book.done %}#}
-                    {#                            it's done#}
-                    {#                        {% endif %}#}
+                    <div class="statuses">
+                        {% if book.liked %}
+                            <img src={% static "media/heart.png" %} height="20" width="20" class="liked" alt="">
+                        {% endif %}
+                        {% if book.wishlist %}
+                            <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
+                        {% endif %}
+                        {% if book.done %}
+                            <img class="done" src={% static "media/done.png" %} width="20" height="20" alt="">
+                        {% endif %}
+                    </div>
                     <img src="{{ book.media }}" width="200" height="300" alt="">
                 </div>
                 <a href="books/{{ book.id }}"><div class="book-title">{{ book.title }}</div></a>

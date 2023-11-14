@@ -11,6 +11,7 @@ class BlogPost(models.Model):
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     tag_id = models.ManyToManyField(Tag)
+    media = models.TextField(null=True)
 
     def __str__(self):
         return self.title

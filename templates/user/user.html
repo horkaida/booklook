@@ -7,6 +7,7 @@
             <div class="user-name">
                 {{ request.user.username }} <br>
                 <a href="/user/{{ request.user.id }}/update">Edit profile</a>
+                <a href="/user/logout">Logout</a>
             </div>
             <div class="user-stats">
                 <div class="stat">
@@ -22,22 +23,28 @@
                     Liked <br>
                     {{ user_data.all_favourites_count }}
                 </div>
+                <div class="stat">
+                    Total Reading Time <br>
+                    {{ user_data.total_reading }} minutes
+                </div>
             </div>
         </div>
         <p class="title">Last Read</p>
-        <div class="container readed-books">
+        <div class="container">
             {% for book in user_data.last_read_books %}
                 <div class="book">
                     <div class="image">
                         <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
                     </div>
                     <div class="book-info">
-                        <a href="/books/{{ book.id }}">
+                        <a href="/books/{{ book.book_id_id }}">
                             <div class="book-title">{{ book.book_id.title }}</div>
                         </a>
                         <div class="book-author">{{ book.book_id.author }}</div>
                         {% if book.total_reading_time %}
-                            <p class="book-title">Reading Time: {{ book.total_reading_time }}</p>
+                            <p class="book-title">Reading Time: {{ book.total_reading_time }}min</p>
+                        {% else %}
+                            <p class="book-title">Reading Time: 0</p>
                         {% endif %}
                     </div>
                 </div>
@@ -50,10 +57,15 @@
                     <div class="image">
                         <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
                     </div>
-                    <a href="/books/{{ book.id }}">
+                    <a href="/books/{{ book.book_id_id }}">
                         <div class="book-title">{{ book.book_id.title }}</div>
                     </a>
                     <div class="book-author">{{ book.book_id.author }}</div>
+                        {% if book.total_reading_time %}
+                            <p class="book-title">Reading Time: {{ book.total_reading_time }}min</p>
+                        {% else %}
+                            <p class="book-title">Reading Time: 0</p>
+                        {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -64,10 +76,15 @@
                     <div class="image">
                         <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
                     </div>
-                    <a href="/books/{{ book.id }}">
+                    <a href="/books/{{ book.book_id_id }}">
                         <div class="book-title">{{ book.book_id.title }}</div>
                     </a>
                     <div class="book-author">{{ book.book_id.author }}</div>
+                        {% if book.total_reading_time %}
+                            <p class="book-title">Reading Time: {{ book.total_reading_time }}min</p>
+                        {% else %}
+                            <p class="book-title">Reading Time: 0</p>
+                        {% endif %}
                 </div>
             {% endfor %}
         </div>
