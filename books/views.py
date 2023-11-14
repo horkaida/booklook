@@ -1,10 +1,8 @@
-from django.db.models import Min
-from django.db.models import Count
 from django.shortcuts import render, redirect
 from books import models
 from books.utils import (get_books_properties,calc_total_reading,
                          get_all_genres, paginate, get_one_book_properties)
-from datetime import datetime, timedelta, date, timezone
+from datetime import datetime, timezone
 from django.contrib.auth.decorators import login_required
 
 def get_main_page(request):
@@ -73,7 +71,7 @@ def search(request, page_number=1):
     else:
         return render(request, 'books/search_result.html',{})
 
-def open_book(request, book_id): #TODO Add to render last reading session by this book
+def open_book(request, book_id):
     book = models.Book.objects.get(id=book_id)
     last_reading_session = models.ReadingSession. objects.filter(user_id_id=request.user.id,
                                                                    book_id_id=book_id).last()
@@ -83,7 +81,7 @@ def open_book(request, book_id): #TODO Add to render last reading session by thi
 
 
 @login_required(login_url='/user/login')
-def start_reading(request, book_id): #TODO DO  OT ALLOW NEW START IF PREVIOUS IS NOT STOPPED
+def start_reading(request, book_id):
     book = models.Book.objects.get(id=book_id)
     current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
                                                           user_id_id=request.user.id).first()
@@ -151,7 +149,7 @@ def mark_as_read(request, book_id):  #SHOW IN TEMPLATE ONLY IF LOGGED
         models.BookInUse.objects.create(book_id_id=book_id,
                                         user_id_id=request.user.id,
                                         status_id=2)
-    return redirect(f'/books/{book_id}')
+    return redirect(get_book_preview, book_id=book_id)
 
 
 @login_required(login_url='/user/login')
@@ -205,7 +203,7 @@ def rate_book(request, book_id):
         new_rate = models.Rate.objects.create(user_id_id=request.user.id,
                                           book_id_id=book_id,
                                           rate=book_rate)
-    return redirect(f'/books/{book_id}')
+    return redirect(get_book_preview, book_id=book_id)
 
 
 

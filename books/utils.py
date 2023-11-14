@@ -1,11 +1,9 @@
-from datetime import datetime, timezone, timedelta
-
 from django.core.paginator import Paginator
 
 from books import models
 
 
-def get_books_properties(page_obj, user_books): #TODO REFACTOR
+def get_books_properties(page_obj, user_books):
     for book in page_obj:
         for user_book in user_books:
             if book.id == user_book.book_id_id and user_book.is_favourite:
