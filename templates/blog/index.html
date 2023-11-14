@@ -7,7 +7,7 @@
         {% for post in page_obj %}
             <div class="blog">
 
-                <div class="title">{{ post.title }}</div>
+                <a href="/blog/{{ post.id }}"><div class="title">{{ post.title }}</div></a>
                 <div class="media"><img width="300" height="200" src="{{ post.media }}" alt=""></div>
                 <div class="text">{{post.text}}</div>
                 <div class="date">{{post.date}}</div>

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <div class="blog post">
+            <div class="title">{{ post.title }}</div>
+            <div class="media"><img width="300" height="200" src="{{ post.media }}" alt=""></div>
+            <div class="text">{{post.text}}</div>
+            <div class="date">{{post.date}}</div>
+        </div>
+
+{% endblock %}
