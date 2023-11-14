@@ -10,12 +10,9 @@ from django.contrib.auth.decorators import login_required
 def get_main_page(request):
     most_popular_books = models.Book.objects.order_by('-average_rate').all()[:8]
     last_feedbacks = models.Feedback.objects.order_by('-created_at').all()[:4]
-    # last_reviewed_books = models.Feedback.objects.values('book_id_id').distinct()
-    #
-    # for book in last_reviewed_books:
-    #     print(book)
-    # page_number = request.GET.get('page')
-    # page_obj = paginate(all_books, page_number)
+    if request.user.is_authenticated:
+        user_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id)
+        most_popular_books = get_books_properties(most_popular_books, user_books)
     return render(request, 'index.html', {'most_popular_books':most_popular_books,
                                           'last_feedbacks':last_feedbacks,
                                           'all_genres':get_all_genres()})
@@ -23,8 +20,7 @@ def get_main_page(request):
 
 def get_all_books(request, page_number=1):
     all_books = models.Book.objects.all()
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
     page_obj = paginate(data=all_books, page_number=page_number)
     if request.user.is_authenticated:
         user_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id)
@@ -34,48 +30,20 @@ def get_all_books(request, page_number=1):
     return render(request, 'books/books.html', {'page_obj': page_obj,
                                                 'all_genres': get_all_genres()})
 
+
 def get_all_books_by_genre(request, genre_id, page_number=1):
     all_books = models.Book.objects.all().filter(genre_id=genre_id)
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
-    page_obj = paginate(all_books, page_number)
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
+    page_obj = paginate(data=all_books, page_number=page_number)
     if request.user.is_authenticated:
-        user_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id,
-                                                           genre_id=genre_id)
+        user_books = models.BookInUse.objects.all().filter(user_id_id=request.user.id)
         page_obj = get_books_properties(page_obj, user_books)
         return render(request, 'books/books.html', {'page_obj':page_obj,
                                                 'all_genres':get_all_genres()})
     return render(request, 'books/books.html', {'page_obj': page_obj,
                                                 'all_genres': get_all_genres()})
 
-@login_required(login_url='/user/login')
-def mark_as_read(request, book_id):
-    if request.user.is_authenticated:   #SHOW IN TEMPLATE ONLY IF LOGGED
-        current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
-                                                              user_id_id=request.user.id).first()
-        if current_book_in_use:
-            models.BookInUse.objects.filter(book_id_id=book_id,
-                                            user_id_id=request.user.id).update(status_id=2)
-        else:
-            models.BookInUse.objects.create(book_id_id=book_id,
-                                            user_id_id=request.user.id,
-                                            status_id=2)
-        return redirect(f'/books/{book_id}')
 
-@login_required(login_url='/user/login')
-def add_to_wishlist(request, book_id):
-    if request.user.is_authenticated: #SHOW IN TEMPLATE ONLY IF LOGGED
-        current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
-                                                              user_id_id=request.user.id).first()
-        if current_book_in_use:
-            models.BookInUse.objects.filter(book_id_id=book_id,
-                                            user_id_id=request.user.id).update(is_wishlist=True)
-        else:
-            models.BookInUse.objects.create(book_id_id=book_id,
-                                            user_id_id=request.user.id,
-                                            is_wishlist=True)
-        return redirect('user/wishlist')
-    return redirect('user/wishlist')
 
 def get_book_preview(request, book_id, page_number=1):
     current_book = models.Book.objects.get(id=book_id)
@@ -86,9 +54,8 @@ def get_book_preview(request, book_id, page_number=1):
             if user_book.book_id_id == current_book.id:
                 current_book = get_one_book_properties(current_book, user_book)
     book_feedbacks = models.Feedback.objects.all().filter(book_id_id=book_id)
-    if request.GET.get('page'):
-        page_number = request.GET.get('page')
-    page_obj = paginate(page_number, book_feedbacks, 10)
+    page_number = request.GET.get('page') if request.GET.get('page') else page_number
+    page_obj = paginate(page_number=page_number, data=book_feedbacks, per_page=10)
     return render(request, 'books/book_preview.html',{'book':current_book,
                                                       'all_genres':get_all_genres(),
                                                       'page_obj':page_obj})
@@ -108,8 +75,11 @@ def search(request, page_number=1):
 
 def open_book(request, book_id): #TODO Add to render last reading session by this book
     book = models.Book.objects.get(id=book_id)
+    last_reading_session = models.ReadingSession. objects.filter(user_id_id=request.user.id,
+                                                                   book_id_id=book_id).last()
     return render(request, 'books/book.html', {'book':book,
-                                               'all_genres':get_all_genres()})
+                                               'all_genres':get_all_genres(),
+                                               'last_reading_session':last_reading_session})
 
 
 @login_required(login_url='/user/login')
@@ -143,13 +113,15 @@ def stop_reading(request, book_id):
             current_total_reading = 0
     else:
         current_total_reading = 0
-    last_reading_session = models.ReadingSession.objects.filter(user_id_id=request.user.id,
-                                                                   book_id_id=book_id).last()
-    total_reading_time = calc_total_reading(current_total_time=current_total_reading,
-                                            stop_reading=stop_reading_time,
-                                            start_reading=last_reading_session.start_reading_time)
-    models.ReadingSession.objects.filter(id=last_reading_session.id).update(end_reading_time=stop_reading_time)
-    models.BookInUse.objects.filter(user_id_id=request.user.id,book_id_id=book_id).update(total_reading_time=total_reading_time)
+    last_reading_session = models.ReadingSession. objects.filter(user_id_id=request.user.id,
+                                                                        book_id_id=book_id).last()
+    if last_reading_session and not last_reading_session.end_reading_time:
+
+        total_reading_time = calc_total_reading(current_total_time=current_total_reading,
+                                                stop_reading=stop_reading_time,
+                                                start_reading=last_reading_session.start_reading_time)
+        models.ReadingSession.objects.filter(id=last_reading_session.id).update(end_reading_time=stop_reading_time)
+        models.BookInUse.objects.filter(user_id_id=request.user.id,book_id_id=book_id).update(total_reading_time=total_reading_time)
 
     return redirect(open_book, book_id=book_id)
 
@@ -157,10 +129,10 @@ def stop_reading(request, book_id):
 @login_required(login_url='/user/login')
 def add_to_favourites(request, book_id):
     current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
-                                                          user_id_id=request.user.id)
+                                                          user_id_id=request.user.id).first()
     if current_book_in_use:
         models.BookInUse.objects.filter(book_id_id=book_id,
-                                        user_id_id=request.user.id).update(is_favourite=True)
+                                        user_id_id=request.user.id).update(is_favourite=False if current_book_in_use.is_favourite else True)
     else:
         models.BookInUse.objects.create(book_id_id=book_id,
                                         user_id_id=request.user.id,
@@ -168,16 +140,53 @@ def add_to_favourites(request, book_id):
     return redirect(f'/books/{book_id}')
 
 
-def get_all_feedbacks(request, page_number=1):
-    all_feedbacks = models.Feedback.objects.all()
-    page_number = request.GET.get('page')
-    page_obj = paginate(page_number, all_feedbacks, 20)
-    return render(request, 'books/feedbacks.html', {'all_genres':get_all_genres(),
-                                                    'page_obj':page_obj})
+@login_required(login_url='/user/login')
+def mark_as_read(request, book_id):  #SHOW IN TEMPLATE ONLY IF LOGGED
+    current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
+                                                          user_id_id=request.user.id).first()
+    if current_book_in_use:
+        models.BookInUse.objects.filter(book_id_id=book_id,
+                                        user_id_id=request.user.id).update(status_id=3 if current_book_in_use.status_id==2 else 2)
+    else:
+        models.BookInUse.objects.create(book_id_id=book_id,
+                                        user_id_id=request.user.id,
+                                        status_id=2)
+    return redirect(f'/books/{book_id}')
 
-def get_feedback(request, feedback_id):
-    #if post - remove feedback
-    return render(request, 'books/feedback.html', {'all_genres':get_all_genres()})
+
+@login_required(login_url='/user/login')
+def add_to_wishlist(request, book_id):
+    if request.user.is_authenticated: #SHOW IN TEMPLATE ONLY IF LOGGED
+        current_book_in_use = models.BookInUse.objects.filter(book_id_id=book_id,
+                                                              user_id_id=request.user.id).first()
+        if current_book_in_use:
+            models.BookInUse.objects.filter(book_id_id=book_id,
+                                            user_id_id=request.user.id).update(is_wishlist=False if current_book_in_use.is_wishlist else True)
+        else:
+            models.BookInUse.objects.create(book_id_id=book_id,
+                                            user_id_id=request.user.id,
+                                            is_wishlist=True)
+    return redirect(get_book_preview, book_id=book_id)
+
+
+@login_required(login_url='/user/login')
+def add_feedback(request):
+    if request.method=='POST':
+        text = request.POST.get('text')
+        book_id = request.POST.get('book_id')
+        models.Feedback.objects.create(user_id_id=request.user.id,
+                                       book_id_id=book_id,
+                                       text=text)
+        return redirect(get_book_preview, book_id=book_id)
+
+
+@login_required(login_url='/user/login')
+def remove_feedback(request, feedback_id):
+    current_feedback = models.Feedback.objects.filter(id=feedback_id,
+                                                      user_id_id=request.user.id).first()
+    if current_feedback:
+        models.Feedback.objects.filter(id=feedback_id).delete()
+        return redirect(get_book_preview, book_id=current_feedback.book_id_id)
 
 def get_genres(request):
     all_genres = get_all_genres()

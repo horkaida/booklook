@@ -2,14 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <p class="title">All Books</p>
-    <div class="container">
-        <form method="post">
-            {% csrf_token %}
-            <div class="container">
-                <h1>Sign Up</h1>
-                <hr>
-
+    <div class="container form">
+        <div class="edit-form">
+            <p class="form-title">Sign Up</p>
+            <form method="post">
+                {% csrf_token %}
                 <label for="username"><b>Юзернейм</b></label>
                 <input type="text" name="username" required>
 
@@ -29,10 +26,18 @@
                 <input type="text" name="last_name" required>
 
 
-                <div class="clearfix">
-                    <button type="submit" class="signupbtn">Sign Up</button>
-                </div>
-            </div>
-        </form>
+                <button type="submit">Sign Up</button>
+
+
+            </form>
+        </div>
     </div>
 {% endblock %}
+
+
+
+
+
+
+
+

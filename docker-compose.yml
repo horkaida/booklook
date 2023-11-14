@@ -6,3 +6,28 @@ services:
     ports:
       - "8000:8000"
     command: python manage.py runserver 0.0.0.0:8000
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  worker:
+    restart: always
+    build: .
+    depends_on:
+      - redis
+      - booklook
+    command: 'celery -A booklook worker -l info'
+
+  beat:
+      restart: always
+      build: .
+      depends_on:
+        - redis
+        - booklook
+        - worker
+      command: 'celery -A booklook beat -l info'
+
+

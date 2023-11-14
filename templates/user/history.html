@@ -16,7 +16,7 @@
                     {#                        {% if book.done %}#}
                     {#                            it's done#}
                     {#                        {% endif %}#}
-                    <img src="{{ book.media }}" width="200" height="300" alt="">
+                    <img src="{{ book.book_id.media }}" width="200" height="300" alt="">
                 </div>
                 <a href="/books/{{ book.book_id_id }}"><div class="book-title">{{ book.book_id.title }}</div></a>
                 <div class="book-author">{{ book.book_id.author }}</div>

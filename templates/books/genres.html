@@ -6,7 +6,7 @@
     <p></p>
 
     {% for genre in all_genres %}
-    	{{ genre.name }}
+        <a href="/books/genres/{{ genre.id }}">{{ genre.name }}</a>
     {% endfor %}
 
 

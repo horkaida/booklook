@@ -2,7 +2,38 @@
 {% load static %}
 
 {% block content %}
-    {{ book.text }}
-    <a href="/books/{{ book.id }}/start">START READING</a>
-    <a href="/books/{{ book.id }}/stop">STOP READING</a>
+    <a href="/books/{{ book.id }}"><h1 class="book-read-title">{{ book.title }}</h1></a>
+    {% if request.user.is_authenticated %}
+        {% if last_reading_session.end_reading_time %}
+            <a class="read-button" href="/books/{{ book.id }}/start">START READING</a>
+        {% elif last_reading_session.start_reading_time %}
+            <a class="read-button" href="/books/{{ book.id }}/stop">STOP READING</a>
+        {% else %}
+            <a class="read-button" href="/books/{{ book.id }}/start">START READING</a>
+        {% endif %}
+    {% endif %}
+    <div class="book-area">
+        <div id="book-area"></div>
+    </div>
+    <script>
+        var book = ePub("{{ book.text }}", {contained:true});
+        var rendition = book.renderTo("book-area", {
+            flow: "scrolled",
+            height: '900px',
+            width: "750px",
+            allowScriptedContent: true
+        });
+        var displayed = rendition.display();
+
+        document.addEventListener("keyup", function (e) {
+            // Left Key
+            if ((e.keyCode || e.which) == 37) {
+                rendition.prev();
+            }
+            // Right Key
+            if ((e.keyCode || e.which) == 39) {
+                rendition.next();
+            }
+        }, false);
+    </script>
 {% endblock %}

@@ -6,7 +6,7 @@
         <div class="book">
             <div class="image">
                 {% if book.liked %}
-                    <img src={% static "media/heart.png.png" %} height="20" width="20" class="liked" alt="">
+                    <img src={% static "media/heart.png" %} height="20" width="20" class="liked" alt="">
                 {% endif %}
                 {% if book.wishlist %}
                     <img class="wishlist" src={% static "media/star.png" %} width="20" height="20" alt="">
@@ -18,28 +18,45 @@
             </div>
             <div class="book-info">
                 <p class="book-title">{{ book.title }} / {{ book.author }}</p>
-                <div class="actions-block">
-                        <a class="action" href="/books/{{ book.id }}/fav">LIKE</a>
-                        <a class="action" href="/books/{{ book.id }}/wish">WISH</a>
-                        <a class="action" href="/books/{{ book.id }}/done">DONE</a>
+                {% if request.user.is_authenticated %}
+                    <div class="actions-block">
+                    <a class="action" href="/books/{{ book.id }}/fav">LIKE</a>
+                    <a class="action" href="/books/{{ book.id }}/wish">WISH</a>
+                    <a class="action" href="/books/{{ book.id }}/done">DONE</a>
                     <form action="/books/{{ book.id }}/rate" method="post">
                         {% csrf_token %}
                         <input type="number" placeholder="rate" name="book_rate">
                         <button type="submit">SUBMIT</button>
                     </form>
                 </div>
+                {% endif %}
                 <p class="book-desc">{{ book.description }}</p>
                 <a class="action" href="/books/{{ book.id }}/open">Open Book</a>
             </div>
 
         </div>
+
+        {% if request.user.is_authenticated %}
+            <p class="title">Write a reviews</p>
+            <div class="add-review">
+                <div class="author">
+                    <img src={% static "media/avatar.png" %} height="20" width="20" alt="">
+                    <p class="name">{{ request.user.username }}</p>
+                </div>
+                <form method="post" action="/books/feedbacks/add">
+                    {% csrf_token %}
+                    <label for="">Review Text</label>
+                    <input type="text" name="text" placeholder="Write a review">
+                    <input type="number" name="book_id" value={{ book.id }} hidden>
+                    <button type="submit">Send Review</button>
+                </form>
+            </div>
+        {% endif %}
         <p class="title">Last book reviews</p>
         <div class="reviews-container">
             {% for feedback in page_obj %}
                 <div class="review">
                     <div class="review-block">
-                        <a href="/books/{{ feedback.book_id_id }}"><p class="book-name">{{ feedback.book_id.title }}</p>
-                        </a>
                         <div class="author">
                             <img src={% static "media/avatar.png" %} height="20" width="20" alt="">
                             <p class="name">{{ feedback.user_id.username }}</p>
@@ -47,6 +64,9 @@
                         <p class="text">
                             {{ feedback.text }}
                         </p>
+                        {% if request.user.id == feedback.user_id_id %}
+                            <a href="/books/feedbacks/{{ feedback.id }}/remove">DELETE</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
